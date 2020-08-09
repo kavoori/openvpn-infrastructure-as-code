@@ -1,0 +1,62 @@
+{
+  "variables": {
+    "aws_access_key": "",
+    "aws_secret_key": "", 
+    "vpc_id" : "",
+    "subnet_id" : "",
+    "region" : "",
+    "client": ""
+  },
+  "builders": [{
+    "type": "amazon-ebs",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "region": "{{user `region`}}",
+    "source_ami_filter": {
+	    "filters": {
+	      "virtualization-type": "hvm",
+	      "name": "ubuntu/images/hvm-ssd/*ubuntu-bionic-18.04-amd64-server-2020*",
+	      "root-device-type": "ebs"
+	    },
+    	"owners": ["099720109477"],
+    	"most_recent": true
+  	},
+    "instance_type": "t2.micro",
+    "iam_instance_profile" : "PackerBuildInstanceRole",
+    "tags" : {
+        "image_OS" : "Ubuntu",
+        "image_app" : "OpenVPN",
+        "Name" : "OpenVPN-Built with Packer"
+    },
+    "vpc_id" : "{{user `vpc_id`}}", 
+    "subnet_id" : "{{user `subnet_id`}}",
+    "associate_public_ip_address": true,
+    "ssh_username": "ubuntu",
+    "ami_name": "openvpn-ubuntu-built-with-packer-{{ isotime \"20060102150405\" }}",
+    "launch_block_device_mappings": [{
+      "device_name": "/dev/sda1",
+      "volume_size": 8,
+      "volume_type": "gp2",
+      "delete_on_termination": true,
+      "encrypted" : true
+    }]
+  }],
+  "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+              "sleep 30",
+              "sudo apt update",
+              "sudo apt -y autoremove",
+              "sudo apt -y install python-minimal"
+            ]
+        },
+        {
+            "type": "ansible",
+            "playbook_file": "ansible/main.yml" ,
+            "inventory_directory" : "ansible/inventories/production",
+            "extra_arguments":["-v", "--extra-vars", "host=default client_name={{user `client`}}"],
+            "ansible_env_vars": [ "ANSIBLE_CONFIG=ansible/ansible.cfg"]
+        }
+  ]
+}

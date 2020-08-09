@@ -1,0 +1,18 @@
+{
+    "Comment": "Update record to reflect new IP address of openVPN Server",
+    "Changes": [
+        {
+            "Action": "UPSERT",
+            "ResourceRecordSet": {
+                "Name": "${dnsName}",
+                "Type": "A",
+                "TTL": 60,
+                "ResourceRecords": [
+                    {
+                        "Value": "${newIPAddress}"
+                    }
+                ]
+            }
+        }
+    ]
+}

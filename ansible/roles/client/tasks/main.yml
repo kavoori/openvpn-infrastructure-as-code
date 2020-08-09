@@ -1,0 +1,54 @@
+- name: Make a directory for CA under root directory
+  file: 
+    path: "{{client_dir}}"
+    state: directory
+    recurse: yes
+- name: Copy client.conf.j2 (using template) to {{client_dir}}/base.conf and substitute the values
+  template:
+    src: templates/client.conf.j2
+    dest: "{{client_dir}}/base.conf"
+    owner: root
+    group: root
+    mode: '0600'
+
+- name : Make a directory for {{client_name}} under {{client_dir}} to make .ovpn file
+  file : 
+    path: "{{client_dir}}/{{client_name}}"
+    state: directory
+    recurse: yes    
+
+- name: "Create {{client_name}} ovpn file"
+  become: yes
+  shell: "{{ item }}"
+  with_items:
+    - cat {{client_dir}}/base.conf > {{ovpn_file}}
+    - echo -e '<ca>' >> {{ovpn_file}}
+    - cat {{keys_dir}}/ca.crt >> {{ovpn_file}}
+    - echo -e '</ca>\n<cert>' >> {{ovpn_file}}
+    - cat {{keys_dir}}/{{client_name}}.crt >> {{ovpn_file}}
+    - echo -e '</cert>\n<key>' >> {{ovpn_file}}
+    - cat {{keys_dir}}/{{client_name}}.key >> {{ovpn_file}}
+    - echo -e '</key>\n<tls-auth>' >> {{ovpn_file}}
+    - cat {{keys_dir}}/ta.key >> {{ovpn_file}}
+    - echo -e '</tls-auth>' >> {{ovpn_file}}
+  args:
+    chdir: "{{client_dir}}"
+    executable: /bin/bash
+
+- name: Delete the {{artifacts_dir}}
+  file:
+    path: "{{artifacts_dir}}"
+    state: absent
+
+- name: Create the {{artifacts_dir}}
+  file: 
+    path: "{{artifacts_dir}}"
+    state: directory
+
+- name: Fetch client configurations
+  fetch:
+    src: "{{client_dir}}/{{client_name}}/{{ item|basename }}"
+    dest: "{{artifacts_dir}}/"
+    flat: yes
+  with_items:
+    - "{{client_name}}.ovpn"        

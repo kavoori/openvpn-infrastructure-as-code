@@ -1,0 +1,253 @@
+- name: Make a directory for CA under root directory
+  file: 
+    path: "{{ca_dir}}"
+    state: directory
+    recurse: yes
+
+- name : Make a directory for tmp under CA directory to copy CA requests
+  file : 
+    path: "{{ca_dir}}/tmp"
+    state: directory
+    recurse: yes
+
+- name: Download Easy RSA 
+  unarchive:
+    src: "{{openvpn_gzip}}"
+    dest: "{{ca_dir}}"
+    remote_src: yes
+
+- name: Copy vars.j2 (using template) to {{ca_dir}}/EasyRSA-{{easy_rsa_v}}/vars and substitute the values
+  template:
+    src: templates/vars.j2
+    dest: "{{ca_dir}}/EasyRSA-{{easy_rsa_v}}/vars"
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Run easyrsa init-pki
+  become_user : root
+  shell: "{{ca_dir}}/EasyRSA-{{easy_rsa_v}}/easyrsa init-pki"
+  args:
+    chdir: "{{ca_dir}}/EasyRSA-{{easy_rsa_v}}"
+    executable: /bin/bash
+
+- name: Run easyrsa with build-ca
+  expect:
+    chdir: "{{ca_dir}}/EasyRSA-{{easy_rsa_v}}"
+    command: "{{ca_dir}}/EasyRSA-{{easy_rsa_v}}/easyrsa build-ca nopass"
+    responses:
+      '(.*)Common Name(.*)': ''
+
+- name : Make a directory for server under home directory
+  file : 
+    path:  "{{server_dir}}"
+    state: directory
+    recurse: yes
+
+- name: Download Easy RSA for server
+  unarchive:
+    src: "{{openvpn_gzip}}"
+    dest: "{{server_dir}}"
+    remote_src: yes
+
+- name: Run easyrsa init-pki for server
+  shell: "{{server_dir}}/EasyRSA-{{easy_rsa_v}}/easyrsa init-pki"
+  args:
+    chdir: "{{server_dir}}/EasyRSA-{{easy_rsa_v}}"
+    executable: /bin/bash
+
+- name: Run easyrsa with gen-req for server
+  expect:
+    chdir: "{{server_dir}}/EasyRSA-{{easy_rsa_v}}"
+    command: "{{server_dir}}/EasyRSA-{{easy_rsa_v}}/easyrsa gen-req server nopass"
+    responses:
+      '(.*)Common Name(.*)': ''
+
+- name: Copy {{server_dir}}/EasyRSA-{{easy_rsa_v}}/pki/private/server.key  to /etc/openvpn/
+  become_user : root
+  command : cp {{server_dir}}/EasyRSA-{{easy_rsa_v}}/pki/private/server.key /etc/openvpn
+
+- name: Copy {{server_dir}}/EasyRSA-{{easy_rsa_v}}/pki/reqs/server.req  to {{ca_dir}}/tmp
+  become_user : root
+  command: cp {{server_dir}}/EasyRSA-{{easy_rsa_v}}/pki/reqs/server.req {{ca_dir}}/tmp
+
+- name: Run easyrsa on CA/tmp folder to import-req
+  become_user : root
+  shell: "{{ca_dir}}/EasyRSA-{{easy_rsa_v}}/easyrsa import-req {{ca_dir}}/tmp/server.req server"
+  args:
+    chdir: "{{ca_dir}}/EasyRSA-{{easy_rsa_v}}"
+    executable: /bin/bash
+
+- name: Run easyrsa sign-req server
+  become_user : root
+  shell: echo "yes" | {{ca_dir}}/EasyRSA-{{easy_rsa_v}}/easyrsa sign-req server server
+  args:
+    chdir: "{{ca_dir}}/EasyRSA-{{easy_rsa_v}}"
+    executable: /bin/bash
+
+- name: Copy {{ca_dir}}/EasyRSA-{{easy_rsa_v}}/pki/issued/server.crt  to /etc/openvpn/
+  become_user : root
+  command : cp {{ca_dir}}/EasyRSA-{{easy_rsa_v}}/pki/issued/server.crt /etc/openvpn
+
+- name: Copy {{ca_dir}}/EasyRSA-{{easy_rsa_v}}/pki/ca.crt  to /etc/openvpn/
+  become_user : root
+  command : cp {{ca_dir}}/EasyRSA-{{easy_rsa_v}}/pki/ca.crt /etc/openvpn
+
+- name: Run easyrsa gen-dh for server
+  shell: "{{server_dir}}/EasyRSA-{{easy_rsa_v}}/easyrsa gen-dh"
+  args:
+    chdir: "{{server_dir}}/EasyRSA-{{easy_rsa_v}}"
+    executable: /bin/bash  
+
+- name: Run openvpn --genkey --secret ta.key
+  shell: openvpn --genkey --secret ta.key
+  args:
+    chdir: "{{server_dir}}/EasyRSA-{{easy_rsa_v}}"
+    executable: /bin/bash
+
+- name: Copy {{server_dir}}/EasyRSA-{{easy_rsa_v}}/ta.key  to /etc/openvpn/
+  become_user : root
+  command : cp {{server_dir}}/EasyRSA-{{easy_rsa_v}}/ta.key /etc/openvpn
+
+- name: Copy {{server_dir}}/EasyRSA-{{easy_rsa_v}}/pki/dh.pem  to /etc/openvpn/
+  become_user : root
+  command : cp {{server_dir}}/EasyRSA-{{easy_rsa_v}}/pki/dh.pem /etc/openvpn
+
+- name: make {{keys_dir}} directory
+  file : 
+    path: "{{keys_dir}}"
+    state: directory
+    recurse: yes
+
+- name: Change file ownership, group and permissions
+  file:
+    path: "{{keys_dir}}"
+    mode: '700'
+
+- name: Run easyrsa with gen-req for client
+  expect:
+    chdir: "{{server_dir}}/EasyRSA-{{easy_rsa_v}}"
+    command: "{{server_dir}}/EasyRSA-{{easy_rsa_v}}/easyrsa gen-req {{client_name}} nopass"
+    responses:
+      '(.*)Common Name(.*)': ''
+
+- name: Copy {{server_dir}}/EasyRSA-{{easy_rsa_v}}/pki/private/{{client_name}}.key {{keys_dir}}
+  become_user : root
+  command : cp {{server_dir}}/EasyRSA-{{easy_rsa_v}}/pki/private/{{client_name}}.key {{keys_dir}}
+
+- name: Copy {{server_dir}}/EasyRSA-{{easy_rsa_v}}/pki/reqs/{{client_name}}.req  to {{ca_dir}}/tmp
+  become_user : root
+  command: cp {{server_dir}}/EasyRSA-{{easy_rsa_v}}/pki/reqs/{{client_name}}.req {{ca_dir}}/tmp
+
+- name: Run easyrsa on CA/tmp folder to import-req {{client_name}}
+  become_user : root
+  shell: "{{ca_dir}}/EasyRSA-{{easy_rsa_v}}/easyrsa import-req {{ca_dir}}/tmp/{{client_name}}.req {{client_name}}"
+  args:
+    chdir: "{{ca_dir}}/EasyRSA-{{easy_rsa_v}}"
+    executable: /bin/bash
+
+- name: Run easyrsa sign-req {{client_name}}
+  become_user : root
+  shell: echo "yes" | {{ca_dir}}/EasyRSA-{{easy_rsa_v}}/easyrsa sign-req client {{client_name}}
+  args:
+    chdir: "{{ca_dir}}/EasyRSA-{{easy_rsa_v}}"
+    executable: /bin/bash
+
+- name: Copy {{ca_dir}}/EasyRSA-{{easy_rsa_v}}/pki/issued/{{client_name}}.crt {{keys_dir}}
+  become_user : root
+  command : cp {{ca_dir}}/EasyRSA-{{easy_rsa_v}}/pki/issued/{{client_name}}.crt {{keys_dir}}
+
+- name: Copy {{server_dir}}/EasyRSA-{{easy_rsa_v}}/ta.key  to {{keys_dir}}
+  become_user : root
+  command : cp {{server_dir}}/EasyRSA-{{easy_rsa_v}}/ta.key {{keys_dir}}
+
+- name: Copy /etc/openvpn/ca.crt {{keys_dir}}
+  become_user : root
+  command : cp /etc/openvpn/ca.crt {{keys_dir}}
+
+- name: Copy server.conf.j2 (using template) to /etc/openvpn and substitute the values
+  template:
+    src: templates/server.conf.j2
+    dest: /etc/openvpn/server.conf
+    owner: root
+    group: root
+    mode: '0600'
+
+- name : Use Sysctl to set ip_forward = 1
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name : Allow OpenSSH UFW
+  ufw:
+    rule: allow
+    port: 22
+    proto: tcp
+
+- name : Allow 1194 in UFW
+  ufw:
+    rule: allow
+    port: 1194
+    proto: tcp
+
+- name : Allow 443 in UFW
+  ufw:
+    rule: allow
+    port: 443
+    proto: tcp
+
+- name : Add routing to /etc/ufw/before.rules 
+  become_user : root
+  blockinfile:
+    path: /etc/ufw/before.rules 
+    marker: "####### {mark} ANSIBLE MANAGED BLOCK #######"
+    insertbefore: "# Don't delete these required lines, otherwise there will be errors"
+    content: |
+      *nat
+      :POSTROUTING ACCEPT [0:0]
+      -A POSTROUTING -s 10.8.0.0/8 -o {{ ansible_default_ipv4.interface }} -j MASQUERADE
+      COMMIT
+
+- name : Edit /etc/default/ufw for DEFAULT_FORWARD_POLICY=ACCEPT
+  become_user : root
+  lineinfile:
+    path: /etc/default/ufw
+    regexp: '^DEFAULT_FORWARD_POLICY='
+    line: 'DEFAULT_FORWARD_POLICY=ACCEPT'
+
+- name : Enable UFW
+  ufw:
+    state : enabled
+
+- name: Start Openvpn Service
+  become_user : root
+  systemd:
+    state: started
+    name: openvpn@server
+
+- name: enable service openvpn and ensure it is not masked
+  become_user : root
+  systemd:
+    name: openvpn@server
+    enabled: yes
+    masked: no
+
+- debug: 
+    var: ansible_default_ipv4.address
+- debug: 
+    var: ansible_all_ipv4_addresses
+- debug: 
+    var: ansible_interfaces
+
+#    - name: get service facts
+#      service_facts:
+#      register: services_state
+#    - debug: 
+#        var: services_state.ansible_facts.services["openvpn@server.service"]
+#    - name: check if openvpn service is running
+#      fail:
+#        msg: Openvpn Service is not running
+#      when: services_state.ansible_facts.services["openvpn@server.service"] is not defined

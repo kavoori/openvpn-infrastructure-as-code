@@ -1,0 +1,21 @@
+---
+remote_user : ubuntu
+host_key_checking : False
+# human-readable stdout/stderr results display
+stdout_callback : debug
+
+ansible_python_interpreter : /usr/bin/python3
+
+easy_rsa_v : 3.0.7
+
+dns_server_1 : 8.8.8.8 
+dns_server_2 : 8.8.4.4
+
+easy_rsa_vars_country : <>
+easy_rsa_vars_province : <>
+easy_rsa_vars_city : <>
+easy_rsa_vars_org : <>
+easy_rsa_vars_email : <>
+easy_rsa_vars_ou : <>
+
+public_ip_address : <>

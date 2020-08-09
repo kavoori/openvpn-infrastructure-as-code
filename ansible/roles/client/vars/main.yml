@@ -1,0 +1,5 @@
+---
+  client_dir: "/root/client-configs/files"
+  ovpn_file: "{{client_dir}}/{{client_name}}/{{client_name}}.ovpn"
+  keys_dir: "/root/client-configs/keys"
+  artifacts_dir: "{{playbook_dir}}/.artifacts"
