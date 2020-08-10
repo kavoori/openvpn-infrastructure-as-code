@@ -1,5 +1,5 @@
 #!/bin/bash
-# Developed by: Rabi Kavoori - rabi@kavoori.com
+# Developed by: Rabi Kavoori
 # This script starts an instance with an AMI created by packer and openVPN software provisioned by packer (in a previous step)
 # This script also creates any security groups necessary for OpenVPN and assigns it to the instance
 # Requirements : AWS CLI to be available in the path and credentials that start instances 

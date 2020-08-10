@@ -1,5 +1,5 @@
 #!/bin/bash
-# Developed by: Rabi Kavoori - rabi@kavoori.com
+# Developed by: Rabi Kavoori
 # This script queries the running instance to get the public IP address and updates Route53 record for dns name with that IP
 # Requirements : AWS CLI to be available in the path and credentials that start instances 
 # Input : VPC Prefix

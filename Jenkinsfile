@@ -11,11 +11,11 @@ pipeline {
             description: 'A prefix for VPC. A VPC with name {VPC_PREFIX}-{REGION} will be created')
         string(
             name: 'ZONE_ID', 
-            defaultValue: 'Z0175892FJ9H6SIL2VP3', 
+            defaultValue: '', 
             description: 'Route53 Hosted Zone ID')
         string(
             name: 'DNS_NAME', 
-            defaultValue: 'openvpn.aws.kavoori.com', 
+            defaultValue: '', 
             description: 'DNS name for the instance')
         choice(
             choices: ['Create' , 'Destroy'],

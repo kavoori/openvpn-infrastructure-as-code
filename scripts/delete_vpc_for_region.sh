@@ -1,5 +1,5 @@
 #!/bin/bash
-# Developed by: Rabi Kavoori - rabi@kavoori.com
+# Developed by: Rabi Kavoori
 # This script deletes the VPC and all its sub resources and also terminiates the OpenVPN instance if it is running 
 # Requirements : AWS CLI to be available in the path and credentials that can delete VPC resources
 # Input : AWS Region ID

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Developed by: Rabi Kavoori - rabi@kavoori.com
+# Developed by: Rabi Kavoori
 # This script creates a VPC and a two subnets so that Packer can use to launch a temporary instance to create an AMI. 
 # Requirements : AWS CLI to be available in the path and credentials that can create VPC resources
 # Input : VPC Prefix

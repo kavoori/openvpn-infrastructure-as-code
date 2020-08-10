@@ -1,5 +1,5 @@
 #!/bin/bash
-# Developed by: Rabi Kavoori - rabi@kavoori.com
+# Developed by: Rabi Kavoori
 # This script deletes the AMI and the snapshot created in earlier steps.
 # Requirements : AWS CLI to be available in the path and credentials that can delete AMIs and snapshots
 # Input : AWS Region ID
