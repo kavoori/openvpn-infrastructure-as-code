@@ -1,5 +1,5 @@
 # OpenVPN AWS infrastructure as code
-A small Jenkins pipeline project to automate the creation (and deletion) of AWS infrastructure using Packer and Ansible to run [OpenVPN](https://en.wikipedia.org/wiki/OpenVPN)
+A small Jenkins pipeline project to automate the creation (and deletion) of AWS infrastructure using Packer and Ansible to run [OpenVPN](https://en.wikipedia.org/wiki/OpenVPN)  
 When used in its entirety, it will:
 1. Create VPC infrastructure
 2. Uses `packer` and `ansible` to create an AMI with OpenVPN software installed (with supplied configuration) with the help of [EasyRSA](https://github.com/OpenVPN/easy-rsa). (Uses v3.0.7)
