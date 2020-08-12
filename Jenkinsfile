@@ -61,7 +61,7 @@ pipeline {
                     env.AWS_SUBNET_ID = sh script:'aws --region ${AWS_REGION} ec2 describe-subnets --filters "Name=vpcId,Values=${AWS_VPC_ID}" "Name=tag:Name,Values=PublicSubnet" --output text --query "Subnets[0].SubnetId"', returnStdout: true
             }
             ansiColor('xterm') {
-                sh 'packer build -color=true -var aws_access_key=${PACKER_AWS_ACCESS_KEY_ID} -var aws_secret_key=${PACKER_AWS_SECRET_ACCESS_KEY} -var region=${AWS_REGION} -var vpc_id=${AWS_VPC_ID} -var subnet_id=${AWS_SUBNET_ID} -var client=${CLIENT_NAME} packer/packer.json'
+                sh 'packer build -color=true -var aws_access_key=${PACKER_AWS_ACCESS_KEY_ID} -var aws_secret_key=${PACKER_AWS_SECRET_ACCESS_KEY} -var region=${AWS_REGION} -var vpc_id=${AWS_VPC_ID} -var subnet_id=${AWS_SUBNET_ID} -var client=${CLIENT_NAME} -var dns_name=${HOSTED_DNS_NAME} packer/packer.json'
             }            
         }
     }
