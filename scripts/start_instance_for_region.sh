@@ -2,7 +2,7 @@
 # Developed by: Rabi Kavoori
 # This script starts an instance with an AMI created by packer and openVPN software provisioned by packer (in a previous step)
 # This script also creates any security groups necessary for OpenVPN and assigns it to the instance
-# Requirements : AWS CLI to be available in the path and credentials that start instances 
+# Requirements : AWS CLI to be available in the path and credentials that start instances
 # Input : VPC Prefix
 # Input : AWS Region ID
 
@@ -10,7 +10,6 @@
 DATE=`date +%Y-%m-%d`
 TIME=`date +%H-%M-%S`
 TODAY=$DATE"T"$TIME
-KEY_NAME="Mother"
 
 SELF="${0##*/}"
 SELF_NO_EXT=$(basename "$0" .sh)
@@ -24,16 +23,17 @@ write_log() {
   echo "${TIMESTAMP} - ${LOG}" 2>&1
 }
 
-if [ "$#" -ne 2 ]; then
+if [ "$#" -ne 3 ]; then
   LOG="============================================================="; write_log
   LOG="Illegal number of parameters. Script requires the name of the region"; write_log
-  LOG="Usage: $0 <vpc-prefix> <region-name>"; write_log
+  LOG="Usage: $0 <vpc-prefix> <region-name> <key-name>"; write_log
   LOG="============================================================="; write_log
   exit 1
 fi
 
 VPC_PREFIX=$1
 REGION=$2
+KEY_NAME=$3
 VPC_NAME=$VPC_PREFIX-$REGION
 APP_NAME="OpenVPN"
 

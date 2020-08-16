@@ -3,4 +3,3 @@ logs/*
 ansible/*.retry
 ansible/.artifacts/*
 scripts/change-resource-record-sets.json
-ansible/inventories/staging/host_vars/testserver.yml
