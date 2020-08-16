@@ -18,11 +18,12 @@ The Jenkins pipeline expects the following
 1. AWS credentials in Jenkins in the [form](https://www.jenkins.io/doc/book/using/using-credentials/) of `vpc-user-aws-secret-key-id` and `vpc-user--aws-secret-access-key` which should have IAM role to create VPC
 2. AWS credentials in Jenkins in the [form](https://www.jenkins.io/doc/book/using/using-credentials/) of `packer-aws-secret-key-id` and `packer-aws-secret-access-key` which should have IAM role limited to building an instance
 3. A `AWS_REGION` to choose AWS region in which the VPC and the instance will be built
-4. A `VPC_NAME_PREFIX` to prefix the VPC name. **Note : The name of the VPC will be `VPC_NAME_PREFIX-AWS_REGION`**
-5. A `HOSTED_ZONE_ID` to identify the Route53 Hosted Zone
-6. A `HOSTED_DNS_NAME` to choose a DNS for updating the Route53 record with the IP address of the instance
-7. A `CLIENT` to give a name to the `.ovpn` file that is created
-8. Finally an option to `Create` or `Destroy` the infrastructure
+4. An option to `Create` or `Destroy` the infrastructure
+5. A `VPC_NAME_PREFIX` to prefix the VPC name. **Note : The name of the VPC will be `VPC_NAME_PREFIX-AWS_REGION`**
+6. A `KEY_NAME` to add to the running instance
+7. A `HOSTED_ZONE_ID` to identify the Route53 Hosted Zone
+8. A `HOSTED_DNS_NAME` to choose a DNS for updating the Route53 record with the IP address of the instance
+9. A `CLIENT` to give a name to the `.ovpn` file that is created
 
 ## Required executables
 The following should be available on the path
