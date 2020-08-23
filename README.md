@@ -32,7 +32,7 @@ The following should be available on the path
 3. `ansible` and `ansible-playbook`
 
 ## Other configuration to modify
-The following values from `ansible/inventories/production/host_vars/default.yml` are used by `ansible` when creating configuration files to be used by [EasyRSA](https://github.com/OpenVPN/easy-rsa) and ***should*** be changed to suit your needs. See EasyRSA [documentation](https://github.com/OpenVPN/easy-rsa/blob/master/README.quickstart.md) for more details:
+The following values from `ansible/roles/server/vars/main.yml` are used by `ansible` when creating configuration files to be used by [EasyRSA](https://github.com/OpenVPN/easy-rsa) and ***should*** be changed to suit your needs. See EasyRSA [documentation](https://github.com/OpenVPN/easy-rsa/blob/master/README.quickstart.md) for more details:
 
 ```
 easy_rsa_vars_country : US
