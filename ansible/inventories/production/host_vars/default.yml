@@ -10,10 +10,3 @@ easy_rsa_v : 3.0.7
 
 dns_server_1 : 8.8.8.8
 dns_server_2 : 8.8.4.4
-
-easy_rsa_vars_country : US
-easy_rsa_vars_province : CA
-easy_rsa_vars_city : San Francisco
-easy_rsa_vars_org : ACME
-easy_rsa_vars_email : admin@acme.com
-easy_rsa_vars_ou : OU

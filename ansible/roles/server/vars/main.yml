@@ -3,3 +3,10 @@
   openvpn_gzip : "https://github.com/OpenVPN/easy-rsa/releases/download/v{{easy_rsa_v}}/EasyRSA-{{easy_rsa_v}}.tgz"
   server_dir: "/root/easy-rsa/server"
   keys_dir: "/root/client-configs/keys"
+
+  easy_rsa_vars_country : US
+  easy_rsa_vars_province : CA
+  easy_rsa_vars_city : San Francisco
+  easy_rsa_vars_org : ACME
+  easy_rsa_vars_email : admin@acme.com
+  easy_rsa_vars_ou : OU
