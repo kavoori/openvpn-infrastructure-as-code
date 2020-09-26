@@ -2,7 +2,7 @@
 A small Jenkins pipeline project to automate the creation (and deletion) of AWS infrastructure using Packer and Ansible to run [OpenVPN](https://en.wikipedia.org/wiki/OpenVPN)  
 When used in its entirety, it will:
 1. Create VPC infrastructure
-2. Uses `packer` and `ansible` to create an AMI with OpenVPN software installed (with supplied configuration) with the help of [EasyRSA](https://github.com/OpenVPN/easy-rsa). (Uses v3.0.7)
+2. Uses `packer` and `ansible` to create an AMI with OpenVPN software installed (with supplied configuration) with the help of [EasyRSA](https://github.com/OpenVPN/easy-rsa). (Uses v3.0.8)
 3. Starts an instance with the generated AMI
 4. Updates Route53 Hosted Zone record with the IP address of the instance to the DNS name chosen
 5. Downloads the `.ovpn` file which can be used to connect to the OpenVPN service running on the instance ([OpenVPN Connect](https://openvpn.net/client-connect-vpn-for-mac-os/) client or [Tunnelblick](https://tunnelblick.net/) can be used to import this file)
