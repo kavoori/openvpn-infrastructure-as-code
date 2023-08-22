@@ -16,7 +16,7 @@
     "source_ami_filter": {
 	    "filters": {
 	      "virtualization-type": "hvm",
-	      "name": "ubuntu/images/hvm-ssd/*ubuntu-bionic-18.04-amd64-server-2020*",
+	      "name": "ubuntu/images/hvm-ssd/*ubuntu-bionic-18.04-amd64-server-2023*",
 	      "root-device-type": "ebs"
 	    },
     	"owners": ["099720109477"],
@@ -33,6 +33,7 @@
     "subnet_id" : "{{user `subnet_id`}}",
     "associate_public_ip_address": true,
     "ssh_username": "ubuntu",
+    "ssh_interface": "session_manager",
     "ami_name": "openvpn-ubuntu-built-with-packer-{{ isotime \"20060102150405\" }}",
     "launch_block_device_mappings": [{
       "device_name": "/dev/sda1",
