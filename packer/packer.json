@@ -23,7 +23,7 @@
     	"most_recent": true
   	},
     "instance_type": "t2.micro",
-//    "iam_instance_profile" : "PackerBuildInstanceRole",
+    "iam_instance_profile" : "PackerBuildInstanceRole",
     "tags" : {
         "image_OS" : "Ubuntu",
         "image_app" : "OpenVPN",
