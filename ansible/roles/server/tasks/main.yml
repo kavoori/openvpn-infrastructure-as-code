@@ -1,3 +1,11 @@
+- name: Delete ca_dir and client_configs_dir if exists before starting
+  file : 
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{easy_rsa_dir}}"
+    - "{{client_configs_dir}}"
+
 - name: Make a directory for CA under root directory
   file: 
     path: "{{ca_dir}}"
@@ -187,10 +195,10 @@
     port: 22
     proto: tcp
 
-- name : Allow 1194 in UFW
+- name : Allow server_port in UFW
   ufw:
     rule: allow
-    port: 1194
+    port: "{{ server_port }}"
     proto: tcp
 
 - name : Allow 443 in UFW

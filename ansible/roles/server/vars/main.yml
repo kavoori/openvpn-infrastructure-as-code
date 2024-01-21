@@ -1,8 +1,10 @@
 ---
-  ca_dir: "/root/easy-rsa/CA"
+  easy_rsa_dir: "/root/easy-rsa"
+  ca_dir: "{{easy_rsa_dir}}/CA"
   openvpn_gzip : "https://github.com/OpenVPN/easy-rsa/releases/download/v{{easy_rsa_v}}/EasyRSA-{{easy_rsa_v}}.tgz"
-  server_dir: "/root/easy-rsa/server"
-  keys_dir: "/root/client-configs/keys"
+  server_dir: "{{easy_rsa_dir}}/server"
+  client_configs_dir: "/root/client-configs"
+  keys_dir: "{{client_configs_dir}}/keys"
 
   easy_rsa_vars_country : US
   easy_rsa_vars_province : CA

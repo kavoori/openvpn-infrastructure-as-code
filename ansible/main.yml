@@ -1,6 +1,6 @@
 ---
 - name : Configure OpenVPN server on Ubuntu
-  hosts : "{{ host }}"
+  hosts: "{{ host }}"
   gather_facts: yes
   become: yes
   tasks: 

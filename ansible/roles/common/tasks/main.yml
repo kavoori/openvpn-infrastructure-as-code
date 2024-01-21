@@ -26,21 +26,17 @@
       - software-properties-common
       - python3-pip
       - openvpn
+      - pipx
+      - python3-pexpect
+      - python3-boto3
+      - python3-boto
+      - tree
 - name: Remove dependencies that are no longer required
   apt:
     autoremove: yes
 - name: Cleanup dependencies
   apt:
     autoclean: yes
-- name: install pexpect
-  pip:
-    name: pexpect
-- name: install boto
-  pip:
-    name: boto
-- name: install boto3
-  pip:
-    name: boto3
 - name: Set Timezone to America/New York
   become_user: root
   command: timedatectl set-timezone America/New_York
