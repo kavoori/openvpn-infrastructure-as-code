@@ -18,7 +18,7 @@
     state: directory
     recurse: yes
 
-- name: Download Easy RSA 
+- name: Download Easy RSA from "{{openvpn_gzip}}"
   unarchive:
     src: "{{openvpn_gzip}}"
     dest: "{{ca_dir}}"

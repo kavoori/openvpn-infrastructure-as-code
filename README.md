@@ -1,8 +1,8 @@
 # OpenVPN AWS infrastructure as code
 A small Jenkins pipeline project to automate the creation (and deletion) of AWS infrastructure using Packer and Ansible to run [OpenVPN](https://en.wikipedia.org/wiki/OpenVPN)  
-When used in its entirety, it will:
+When used in its entirety, it will:  
 1. Create VPC infrastructure
-2. Uses `packer` and `ansible` to create an AMI with OpenVPN software installed (with supplied configuration) with the help of [EasyRSA](https://github.com/OpenVPN/easy-rsa). (Uses v3.0.8)
+2. Uses `packer` and `ansible` to create an AMI with OpenVPN software installed (with supplied configuration) with the help of [EasyRSA](https://github.com/OpenVPN/easy-rsa). (Uses v3.2.1)
 3. Starts an instance with the generated AMI
 4. Updates Route53 Hosted Zone record with the IP address of the instance to the DNS name chosen
 5. Downloads the `.ovpn` file which can be used to connect to the OpenVPN service running on the instance ([OpenVPN Connect](https://openvpn.net/client-connect-vpn-for-mac-os/) client or [Tunnelblick](https://tunnelblick.net/) can be used to import this file)
@@ -15,7 +15,7 @@ The pipeline also has an option to cleanup the above created infrastructure by c
 
 ## Required information
 The Jenkins pipeline expects the following
-1. AWS credentials in Jenkins in the [form](https://www.jenkins.io/doc/book/using/using-credentials/) of `vpc-user-aws-secret-key-id` and `vpc-user--aws-secret-access-key` which should have IAM role to create VPC
+1. AWS credentials in Jenkins in the [form](https://www.jenkins.io/doc/book/using/using-credentials/) of `vpc-user-aws-secret-key-id` and `vpc-user-aws-secret-access-key` which should have IAM role to create VPC
 2. AWS credentials in Jenkins in the [form](https://www.jenkins.io/doc/book/using/using-credentials/) of `packer-aws-secret-key-id` and `packer-aws-secret-access-key` which should have IAM role limited to building an instance
 3. A `AWS_REGION` to choose AWS region in which the VPC and the instance will be built
 4. An option to `Create` or `Destroy` the infrastructure

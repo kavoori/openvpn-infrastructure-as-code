@@ -9,13 +9,12 @@
     name: "{{ packages }}"
   vars:
     packages:
-      - bash-completion 
+      - bash-completion
       - wget 
       - curl 
-      - ntp 
-      - ntpdate 
-      - git 
-      - awscli 
+      - ntp
+      - ntpdate
+      - git      
       - colordiff
       - dnsutils
       - screen

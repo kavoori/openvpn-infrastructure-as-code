@@ -6,7 +6,7 @@ stdout_callback : debug
 
 ansible_python_interpreter : /usr/bin/python3
 
-easy_rsa_v : 3.1.7
+easy_rsa_v : 3.2.1
 server_port: 1194
 dns_server_1 : 8.8.8.8
 dns_server_2 : 8.8.4.4
