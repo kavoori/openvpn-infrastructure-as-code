@@ -23,8 +23,8 @@ write_log() {
 }
 
 if [ "$#" -ne 1 ]; then
-	LOG="============================================================="; write_log
-	LOG="Illegal number of parameters. Script requires the name of the region"; write_log
+  LOG="============================================================="; write_log
+  LOG="Illegal number of parameters. Script requires the name of the region"; write_log
   LOG="Usage: $0 <region-name>"; write_log
   LOG="============================================================="; write_log
   exit 1

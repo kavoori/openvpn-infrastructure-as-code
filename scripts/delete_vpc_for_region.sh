@@ -24,7 +24,7 @@ write_log() {
 
 if [ "$#" -ne 2 ]; then
 	LOG="============================================================="; write_log
-	LOG="Illegal number of parameters. Script requires the name of the region"; write_log
+	LOG="Illegal number of parameters. Script requires two parameters"; write_log
   LOG="Usage: $0 <vpc-prefix> <region-name>"; write_log
   LOG="============================================================="; write_log
   exit 1
