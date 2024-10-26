@@ -24,22 +24,28 @@
       - htop
       - software-properties-common
       - python3-pip
-      - openvpn
-      - pipx
       - python3-pexpect
       - python3-boto3
       - python3-boto
+      - python3-jmespath
+      - python3-packaging
+      - python3-pexpect
+      - python3-boto3
+      - python3-boto
+      - openvpn
       - tree
+
 - name: Remove dependencies that are no longer required
   apt:
     autoremove: yes
+
 - name: Cleanup dependencies
   apt:
     autoclean: yes
+
 - name: Set Timezone to America/New York
   become_user: root
   command: timedatectl set-timezone America/New_York
-- name: Ansible systemd start ntp
-  systemd:
-    name: ntp
-    state: started
+
+- name: Start NTP and enable
+  service: name=ntp state=started enabled=yes

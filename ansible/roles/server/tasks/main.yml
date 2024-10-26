@@ -181,13 +181,15 @@
     group: root
     mode: '0600'
 
-- name : Use Sysctl to set ip_forward = 1
-  sysctl:
-    name: net.ipv4.ip_forward
-    value: 1
-    sysctl_set: yes
+- name: Ensure IP forwarding is enabled in sysctl.conf
+  ansible.builtin.lineinfile:
+    path: /etc/sysctl.conf
+    regexp: '^net.ipv4.ip_forward'
+    line: 'net.ipv4.ip_forward = 1'
     state: present
-    reload: yes
+
+- name: Apply sysctl changes
+  ansible.builtin.command: sysctl -p
 
 - name : Allow OpenSSH UFW
   ufw:

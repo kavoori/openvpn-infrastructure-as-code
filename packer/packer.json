@@ -16,7 +16,7 @@
     "source_ami_filter": {
 	    "filters": {
 	      "virtualization-type": "hvm",
-	      "name": "ubuntu/images/hvm-ssd/*ubuntu-bionic-18.04-amd64-server-2023*",
+	      "name": "ubuntu/images/hvm-ssd-gp3/*ubuntu-noble-24.04-amd64-server-2024*",
 	      "root-device-type": "ebs"
 	    },
     	"owners": ["099720109477"],
@@ -49,14 +49,14 @@
               "sleep 30",
               "sudo apt update",
               "sudo apt -y autoremove",
-              "sudo apt -y install python-minimal"
+              "sudo apt -y install python-is-python3"
             ]
         },
         {
             "type": "ansible",
             "playbook_file": "ansible/main.yml" ,
             "inventory_directory" : "ansible/inventories/production",
-            "extra_arguments":["-v", "--extra-vars", "host=default client_name={{user `client`}} aws_region={{user `region`}} dns_name={{user `dns_name`}}"],
+            "extra_arguments":["--extra-vars", "host=default client_name={{user `client`}} aws_region={{user `region`}} dns_name={{user `dns_name`}}"],            
             "ansible_env_vars": [ "ANSIBLE_CONFIG=ansible/ansible.cfg"]
         }
   ]
